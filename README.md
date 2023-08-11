@@ -1,6 +1,8 @@
 # Bank-Tycoon-GUI-Script
 A GUI for Bank Tycoon on Roblox
 
+![image](https://github.com/ExamV1/Bank-Tycoon-GUI-Script/assets/87576045/2994996d-55a0-4631-b3e3-a3d458d2b3c5)
+
 
 #main section
 ![image](https://user-images.githubusercontent.com/87576045/222209201-3e5bfcf1-ec39-41d3-9134-36603dd6da35.png)
