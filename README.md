@@ -1,3 +1,5 @@
+# 30/06/2024 - Source Code Public
+
 # Bank-Tycoon-GUI-Script
 A GUI for Bank Tycoon on Roblox
 
