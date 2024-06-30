@@ -1,0 +1,668 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("GUI for Bank Tycoon made by ExamV1", colors)
+
+-- MAIN
+local Tab = Window:NewTab("Main")
+local SecondSection = Tab:NewSection("Stuff")
+local Main = Window:NewTab("Buy Workers")
+local MainSection = Main:NewSection("Buy More Workers")
+local Setting = Window:NewTab("Setting")
+local SettingSection = Setting:NewSection("Setting")
+
+
+
+--Collect Cash
+
+SecondSection:NewButton("Collect Cash", "Collect the gathered cash", function(v)
+game:GetService("ReplicatedStorage"):WaitForChild("RE"):WaitForChild("emptyCollector"):InvokeServer()
+end)
+
+
+
+--Delete doors
+
+
+SecondSection:NewButton("Remove Door Beams Individually(Spam)", "Remove Front Doors and Owner Doors from the tycoon banks", function(v)
+local function deleteKillBeams(obj)
+  local killBeams = obj:FindFirstChild("KillBeam")
+  if killBeams then
+    killBeams:Destroy()
+    return
+  end
+
+  for _, child in pairs(obj:GetChildren()) do
+    deleteKillBeams(child)
+  end
+end
+
+deleteKillBeams(game:GetService("Workspace"))
+end)
+
+
+--Obby Platform
+
+
+SecondSection:NewButton("Obby Platform", "Spawns a platform above each players obby(Locally)", function()
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local platform1 = Instance.new("Part")
+platform1.Anchored = true
+platform1.Size = Vector3.new(730, 1, 10)
+platform1.Material = Enum.Material.Wood
+platform1.TopSurface = Enum.SurfaceType.Smooth
+platform1.BottomSurface = Enum.SurfaceType.Smooth
+
+local position1 = Vector3.new(-7113.09033203125, -209.82107543945312, -15294.7880859375)
+platform1.CFrame = CFrame.new(position1) * CFrame.Angles(0, math.pi/2, 0)
+
+platform1.Parent = game.Workspace
+
+local platform2 = Instance.new("Part")
+platform2.Anchored = true
+platform2.Size = Vector3.new(10, 1, 730)
+platform2.Material = Enum.Material.Wood
+platform2.TopSurface = Enum.SurfaceType.Smooth
+platform2.BottomSurface = Enum.SurfaceType.Smooth
+
+local position2 = Vector3.new(-6172.6982421875, -209.82107543945312, -14336.6728515625)
+platform2.CFrame = CFrame.new(position2) * CFrame.Angles(0, math.pi/2, 0)
+
+platform2.Parent = game.Workspace
+
+local platform3 = Instance.new("Part")
+platform3.Anchored = true
+platform3.Size = Vector3.new(730, 1, 10)
+platform3.Material = Enum.Material.Wood
+platform3.TopSurface = Enum.SurfaceType.Smooth
+platform3.BottomSurface = Enum.SurfaceType.Smooth
+
+local position3 = Vector3.new(-7120.66650390625, -209.82107543945312, -13383.5419921875)
+platform3.CFrame = CFrame.new(position3) * CFrame.Angles(0, math.pi/2, 0)
+
+platform3.Parent = game.Workspace
+
+local platform4 = Instance.new("Part")
+platform4.Anchored = true
+platform4.Size = Vector3.new(10, 1, 730)
+platform4.Material = Enum.Material.Wood
+platform4.TopSurface = Enum.SurfaceType.Smooth
+platform4.BottomSurface = Enum.SurfaceType.Smooth
+
+local position4 = Vector3.new(-8070.94140625, -209.78775024414062, -14343.861328125)
+platform4.CFrame = CFrame.new(position4) * CFrame.Angles(0, math.pi/2, 0)
+
+platform4.Parent = game.Workspace
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--Remove Lag by deleting workers locally does not affect the process of collecting cash, just removes lag from you
+
+MainSection:NewButton("Remove Lag", "Remove Lag from workers, droppers, miners, and crystals by deleting them locally", function(v)
+  local banks = {game:GetService("Workspace").Tycoon.Tycoons["Bank 22"].PurchasedObjects, game:GetService("Workspace").Tycoon.Tycoons["Bank 11"].PurchasedObjects, game:GetService("Workspace").Tycoon.Tycoons["Bank 33"].PurchasedObjects, game:GetService("Workspace").Tycoon.Tycoons["Bank 44"].PurchasedObjects}
+  local clerks = {"Clerk", "Banker", "Desk Worker"}
+  local dropperTypes = {"Tix", "Money", "Silver", "Gold", "Diamond", "Emerald", "Ruby"}
+  local minersAndCrystals = {"Miner", "Crystal", "Miner Large", "Large Crystal"}
+  local warehouseManagers = {"Warehouse Manager 1", "Warehouse Manager 2"}
+
+  for _, bank in pairs(banks) do
+    for _, clerk in pairs(clerks) do
+      local objects = bank:GetChildren()
+      for _, object in pairs(objects) do
+        if string.match(object.Name, clerk .. " %d+") then
+          object:Destroy()
+        end
+      end
+    end
+
+    for _, dropperType in ipairs(dropperTypes) do
+      local objects = bank:GetChildren()
+      for _, object in pairs(objects) do
+        if string.match(object.Name, dropperType .. " Dropper %d+.%d+") or string.match(object.Name, dropperType .. " Dropper %d+") then
+          object:Destroy()
+        end
+      end
+    end
+
+    for _, minerOrCrystal in ipairs(minersAndCrystals) do
+      local objects = bank:GetChildren()
+      for _, object in pairs(objects) do
+        if string.match(object.Name, minerOrCrystal .. " %d+") or string.match(object.Name, minerOrCrystal) then
+          object:Destroy()
+        end
+      end
+    end
+
+    for _, warehouseManager in ipairs(warehouseManagers) do
+      local objects = bank:GetChildren()
+      for _, object in pairs(objects) do
+        if string.match(object.Name, warehouseManager) then
+          object:Destroy()
+        end
+      end
+    end
+  end
+end)
+
+
+
+
+--Delete Gems From stacking from the droppers
+MainSection:NewToggle("Remove Gem Clutter", "Remove the clutter from the droppers", function(v)
+        while true do 
+local workspace = game:GetService("Workspace")
+local moneyParts = workspace:GetDescendants()
+
+for _, object in pairs(moneyParts) do
+  if object.Name == "MoneyPart" then
+    object:Destroy()
+  end
+end
+
+    
+    
+
+            wait(1)
+
+
+        end
+end)
+
+
+
+
+
+
+
+
+--Buy Clerks
+
+local dropdown = MainSection:NewDropdown("Buy Clerk", "Buy extra clerks", {"Clerk 1", "Clerk 2", "Clerk 3", "Clerk 4", "Clerk 5"}, function(currentOption)
+    local clerk = workspace.Tycoon.Tycoons["Bank 22"].Buttons[currentOption]
+    if clerk then
+        local args = {
+            [1] = clerk
+        }
+
+        game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+    end
+	dropdown:SetSelectedIndex(0)
+	dropdown:SetText("Buy Clerk")
+end)
+
+
+
+--Buy Bankers
+
+local dropdown = MainSection:NewDropdown("Buy Banker", "Buy extra bankers", {"Banker 1", "Banker 2", "Banker 3", "Banker 4", "Banker 5", "Banker 6"}, function(currentOption)
+    local banker = workspace.Tycoon.Tycoons["Bank 22"].Buttons[currentOption]
+    if banker then
+        local args = {
+            [1] = banker
+        }
+
+        game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+    end
+	dropdown:SetSelectedIndex(0)
+	dropdown:SetText("Buy Banker")
+end)
+
+
+--Buy Tix Droppers
+
+local dropdown = MainSection:NewDropdown("Buy Tix Droppers", "Buy extra Tix Dropper", {"Tix Dropper 1.1", "Tix Dropper 1.2", "Tix Dropper 1.3", "Tix Dropper 2.1", "Tix Dropper 2.2", "Tix Dropper 2.3", "Tix Dropper 3.1U", "Tix Dropper 3.2U", "Tix Dropper 3.3U"}, function(currentOption)
+    local tixDropper = workspace.Tycoon.Tycoons["Bank 22"].Buttons[currentOption]
+    if tixDropper then
+        local args = {
+            [1] = tixDropper
+        }
+
+        game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+    end
+    dropdown:SetSelectedIndex(0)
+    dropdown:SetText("DropdownText")
+end)
+
+
+--Buy Money Droppers
+
+local dropdown = MainSection:NewDropdown("Buy Money Droppers", "Buy extra Money droppers", {"Money Dropper 1.1", "Money Dropper 1.2", "Money Dropper 1.3", "Money Dropper 2.1", "Money Dropper 2.2", "Money Dropper 2.3", "Money Dropper 3.1U", "Money Dropper 3.2U", "Money Dropper 3.3U"}, function(currentOption)
+    local moneyDropper = workspace.Tycoon.Tycoons["Bank 22"].Buttons[currentOption]
+    if moneyDropper then
+        local args = {
+            [1] = moneyDropper
+        }
+
+        game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+    end
+    dropdown:SetSelectedIndex(0)
+    dropdown:SetText("DropdownText")
+end)
+
+
+--Buy desk Workers
+
+local dropdown = MainSection:NewDropdown("Buy Desk Workers", "Buy additional desk workers", {"Desk Worker 1", "Desk Worker 2", "Desk Worker 3", "Desk Worker 4", "Desk Worker 5", "Desk Worker 6", "Desk Worker 7", "Desk Worker 8"}, function(currentOption)
+    local deskWorker = workspace.Tycoon.Tycoons["Bank 22"].Buttons[currentOption]
+    if deskWorker then
+        local args = {
+            [1] = deskWorker
+        }
+
+        game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+    end
+    dropdown:SetSelectedIndex(0)
+    dropdown:SetText("DropdownText")
+end)
+
+
+
+
+--Buy Silver Droppers
+
+local dropdown = MainSection:NewDropdown("Buy Silver Droppers", "Buy extra silver droppers", {'Silver Dropper 1.1', 'Silver Dropper 1.1U', 'Silver Dropper 1.2', 'Silver Dropper 1.2U', 'Silver Dropper 1.3', 'Silver Dropper 1.3U', 'Silver Dropper 2.1', 'Silver Dropper 2.1U', 'Silver Dropper 2.2', 'Silver Dropper 2.2U', 'Silver Dropper 2.3', 'Silver Dropper 2.3U', 'Silver Dropper 3.1', 'Silver Dropper 3.1U', 'Silver Dropper 3.2', 'Silver Dropper 3.2U', 'Silver Dropper 3.3', 'Silver Dropper 3.3U'}, function(currentOption)
+  local silverDropper = workspace.Tycoon.Tycoons["Bank 11"].Buttons[currentOption]
+  if silverDropper then
+    local args = {
+      [1] = silverDropper
+    }
+
+    game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+  end
+  dropdown:SetSelectedIndex(0)
+  dropdown:SetText("Buy Silver Droppers")
+end)
+
+
+--Buy Gold Droppers
+
+local dropdown = MainSection:NewDropdown("Buy Gold Droppers", "Buy extra gold droppers", {'Gold Dropper 1.1', 'Gold Dropper 1.1U', 'Gold Dropper 1.2', 'Gold Dropper 1.2U', 'Gold Dropper 1.3', 'Gold Dropper 1.3U', 'Gold Dropper 2.1', 'Gold Dropper 2.1U', 'Gold Dropper 2.2', 'Gold Dropper 2.2U', 'Gold Dropper 2.3', 'Gold Dropper 2.3U', 'Gold Dropper 3.1', 'Gold Dropper 3.1U', 'Gold Dropper 3.2', 'Gold Dropper 3.2U', 'Gold Dropper 3.3', 'Gold Dropper 3.3U'}, function(currentOption)
+  local goldDropper = workspace.Tycoon.Tycoons["Bank 11"].Buttons[currentOption]
+  if goldDropper then
+    local args = {
+      [1] = goldDropper
+    }
+
+    game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+  end
+  dropdown:SetSelectedIndex(0)
+  dropdown:SetText("Buy Gold Droppers")
+end)
+
+--Buy Diamond Droppers
+
+local dropdown = MainSection:NewDropdown("Buy Diamond Droppers", "Buy extra diamond droppers", {'Diamond Dropper 1.1', 'Diamond Dropper 1.1U', 'Diamond Dropper 1.2', 'Diamond Dropper 1.2U', 'Diamond Dropper 1.3', 'Diamond Dropper 1.3U', 'Diamond Dropper 2.1', 'Diamond Dropper 2.1U', 'Diamond Dropper 2.2', 'Diamond Dropper 2.2U', 'Diamond Dropper 2.3', 'Diamond Dropper 2.3U', 'Diamond Dropper 3.1', 'Diamond Dropper 3.1U', 'Diamond Dropper 3.2', 'Diamond Dropper 3.2U', 'Diamond Dropper 3.3', 'Diamond Dropper 3.3U'}, function(currentOption)
+  local diamondDropper = workspace.Tycoon.Tycoons["Bank 11"].Buttons[currentOption]
+  if diamondDropper then
+    local args = {
+      [1] = diamondDropper
+    }
+
+    game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+  end
+  dropdown:SetSelectedIndex(0)
+  dropdown:SetText("Buy Diamond Droppers")
+end)
+
+
+--Buy Emerald Droppers
+
+local dropdown = MainSection:NewDropdown("Buy Emerald Droppers", "Buy extra emerald droppers", {'Emerald Dropper 1.1', 'Emerald Dropper 1.1U', 'Emerald Dropper 1.2', 'Emerald Dropper 1.2U', 'Emerald Dropper 1.3', 'Emerald Dropper 1.3U', 'Emerald Dropper 2.1', 'Emerald Dropper 2.1U', 'Emerald Dropper 2.2', 'Emerald Dropper 2.2U', 'Emerald Dropper 2.3', 'Emerald Dropper 2.3U', 'Emerald Dropper 3.1', 'Emerald Dropper 3.1U', 'Emerald Dropper 3.2', 'Emerald Dropper 3.2U', 'Emerald Dropper 3.3', 'Emerald Dropper 3.3U'}, function(currentOption)
+  local emeraldDropper = workspace.Tycoon.Tycoons["Bank 11"].Buttons[currentOption]
+  if emeraldDropper then
+    local args = {
+      [1] = emeraldDropper
+    }
+
+    game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+  end
+  dropdown:SetSelectedIndex(0)
+  dropdown:SetText("Buy Emerald Droppers")
+end)
+
+
+--Buy Ruby Droppers
+
+local dropdown = MainSection:NewDropdown("Buy Ruby Droppers", "Buy extra Ruby Droppers", {'Ruby Dropper 1.1', 'Ruby Dropper 1.1U', 'Ruby Dropper 1.2', 'Ruby Dropper 1.2U', 'Ruby Dropper 1.3', 'Ruby Dropper 1.3U', 'Ruby Dropper 2.1', 'Ruby Dropper 2.1U', 'Ruby Dropper 2.2', 'Ruby Dropper 2.2U', 'Ruby Dropper 2.3', 'Ruby Dropper 2.3U', 'Ruby Dropper 3.1', 'Ruby Dropper 3.1U', 'Ruby Dropper 3.2', 'Ruby Dropper 3.2U', 'Ruby Dropper 3.3', 'Ruby Dropper 3.3U'}, function(currentOption)
+local rubyDropper = workspace.Tycoon.Tycoons["Bank 11"].Buttons[currentOption]
+if rubyDropper then
+local args = {
+[1] = rubyDropper
+}
+    game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+end
+dropdown:SetSelectedIndex(0)
+dropdown:SetText("DropdownText")
+end)
+
+
+--Buy Miners and Crystals
+
+local dropdown = MainSection:NewDropdown("Buy Miners and Crystals", "Buy Miners and Crystals", {'Miner 1', 'Miner 2', 'Miner 3', 'Miner 4', 'Miner 5', 'Miner 6', 'Miner 7', 'Miner 8', 'Miner Large 1', 'Miner Large 2', 'Miner Large 3', 'Miner Large 4', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 5', 'Crystal 6', 'Crystal 7', 'Crystal 8', 'Large Crystal'}, function(currentOption)
+local minerOrCrystal = workspace.Tycoon.Tycoons["Bank 22"].Buttons[currentOption]
+if minerOrCrystal then
+local args = {
+[1] = minerOrCrystal
+}
+    game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+end
+dropdown:SetSelectedIndex(0)
+dropdown:SetText("DropdownText")
+end)
+
+
+--Buy Warehouse Managers
+local dropdown = MainSection:NewDropdown("Buy Warehouse Managers", "Buy extra warehouse managers", {"Warehouse Manager 1", "Warehouse Manager 2"}, function(currentOption)
+    local warehouseManager = workspace.Tycoon.Tycoons["Bank 22"].Buttons[currentOption]
+    if warehouseManager then
+        local args = {
+            [1] = warehouseManager
+        }
+
+        game:GetService("ReplicatedStorage").RE.purchaseButton:InvokeServer(unpack(args))
+    end
+	dropdown:SetSelectedIndex(0)
+	dropdown:SetText("Buy warehouseManager")
+end)
+
+
+
+SettingSection:NewKeybind("Toggle UI", "Close/Open UI", Enum.KeyCode.BackSlash, function()
+	Library:ToggleUI()
+end)
+
+
+SettingSection:NewButton("Infinite Yield", "This another populuar universal script", function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", true))()
+end)
+
+
+
+button = SettingSection:NewButton("Unhide chat", "reveals ALL hidden messages in the default chat", function()
+enabled = true --chat "/spy" to toggle!
+spyOnMyself = true --if true will check your messages too
+public = false --if true will chat the logs publicly (fun, risky)
+publicItalics = true --if true will use /me to stand out
+privateProperties = { --customize private logs
+	Color = Color3.fromRGB(0,255,255); 
+	Font = Enum.Font.SourceSansBold;
+	TextSize = 18;
+}
+
+
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer or Players:GetPropertyChangedSignal("LocalPlayer"):Wait() or Players.LocalPlayer
+local saymsg = game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+local getmsg = game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("OnMessageDoneFiltering")
+local instance = (_G.chatSpyInstance or 0) + 1
+_G.chatSpyInstance = instance
+
+local function onChatted(p,msg)
+	if _G.chatSpyInstance == instance then
+		if p==player and msg:lower():sub(1,4)=="/spy" then
+			enabled = not enabled
+			wait(0.3)
+			privateProperties.Text = "{SPY "..(enabled and "EN" or "DIS").."ABLED}"
+			StarterGui:SetCore("ChatMakeSystemMessage",privateProperties)
+		elseif enabled and (spyOnMyself==true or p~=player) then
+			msg = msg:gsub("[\n\r]",''):gsub("\t",' '):gsub("[ ]+",' ')
+			local hidden = true
+			local conn = getmsg.OnClientEvent:Connect(function(packet,channel)
+				if packet.SpeakerUserId==p.UserId and packet.Message==msg:sub(#msg-#packet.Message+1) and (channel=="All" or (channel=="Team" and public==false and Players[packet.FromSpeaker].Team==player.Team)) then
+					hidden = false
+				end
+			end)
+			wait(1)
+			conn:Disconnect()
+			if hidden and enabled then
+				if public then
+					saymsg:FireServer((publicItalics and "/me " or '').."{SPY} [".. p.Name .."]: "..msg,"All")
+				else
+					privateProperties.Text = "{SPY} [".. p.Name .."]: "..msg
+					StarterGui:SetCore("ChatMakeSystemMessage",privateProperties)
+				end
+			end
+		end
+	end
+end
+
+for _,p in ipairs(Players:GetPlayers()) do
+	p.Chatted:Connect(function(msg) onChatted(p,msg) end)
+end
+Players.PlayerAdded:Connect(function(p)
+	p.Chatted:Connect(function(msg) onChatted(p,msg) end)
+end)
+privateProperties.Text = "{SPY "..(enabled and "EN" or "DIS").."ABLED}"
+StarterGui:SetCore("ChatMakeSystemMessage",privateProperties)
+if not player.PlayerGui:FindFirstChild("Chat") then wait(3) end
+local chatFrame = player.PlayerGui.Chat.Frame
+chatFrame.ChatChannelParentFrame.Visible = true
+chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
+end)
+
+
+
+button = SettingSection:NewButton("Chat Translation", "reveals ALL messages in english and allows you to speak inother lanuguage", function()
+if not game['Loaded'] then game['Loaded']:Wait() end; repeat wait(.06) until game:GetService('Players').LocalPlayer ~= nil
+
+local YourLang = "en" -- Language code that the messages are going to be translated to
+local keys = {"trnsl.1.1.20230209T200308Z.0ffe3986577fb9cb.4c8ace01cebb41fc8be390c1116202d2450f0df5"}
+
+
+local Players = game:GetService("Players")
+local LP = Players.LocalPlayer
+local StarterGui = game:GetService('StarterGui')
+for i=1, 15 do
+    local r = pcall(StarterGui["SetCore"])
+    if r then break end
+    game:GetService('RunService').RenderStepped:wait()
+end
+wait()
+
+local HttpService = game:GetService("HttpService")
+local properties = {
+    Color = Color3.new(1,1,0);
+    Font = Enum.Font.SourceSansItalic;
+    TextSize = 16;
+}
+
+game:GetService("StarterGui"):SetCore("SendNotification",
+    {
+        Title = "Chat Translator",
+        Text = "",
+        Duration = 3
+    }
+)
+                  
+properties.Text = "[TR] To send messages in a language, say > followed by the target language/language code, e.g.: >ru or >russian. To disable (go back to original language), say >d."
+StarterGui:SetCore("ChatMakeSystemMessage", properties)
+
+function test()
+    game:HttpGetAsync("https://translate.yandex.net/api/v1.5/tr.json/detect?key="..key.."&text=h")
+end
+local s, e = pcall(test)
+while not s do
+    print("Error: "..e)
+    key = keys[math.random(#keys)]
+    wait()
+    s, e = pcall(test)
+end
+
+function translateFrom(message)
+    local URL = "https://translate.yandex.net/api/v1.5/tr.json/detect?key="..key.."&text="..HttpService:UrlEncode(message)
+    local lang = HttpService:JSONDecode(game:HttpGetAsync(URL)).lang
+    local translation
+    if lang and lang ~= YourLang then
+        local URL = "https://translate.yandex.net/api/v1.5/tr.json/translate?key="..key.."&text="..HttpService:UrlEncode(message).."&lang="..lang.."-"..YourLang
+        translation = HttpService:JSONDecode(game:HttpGetAsync(URL)).text[1]
+    end
+    return {translation, lang}
+end
+
+function get(plr, msg)
+    local tab = translateFrom(msg)
+    local translation = tab[1]
+    if translation then
+        properties.Text = "("..tab[2]:upper()..") ".."[".. plr.Name .."]: "..translation
+        StarterGui:SetCore("ChatMakeSystemMessage", properties)
+    end
+end
+
+for i, plr in ipairs(Players:GetPlayers()) do
+    plr.Chatted:Connect(function(msg)
+        get(plr, msg)
+    end)
+end
+Players.PlayerAdded:Connect(function(plr)
+    plr.Chatted:Connect(function(msg)
+        get(plr, msg)
+    end)
+end)
+
+-- Language Dictionary
+local l = {afrikaans = "af",albanian = "sq",amharic = "am",arabic = "ar",armenian = "hy",azerbaijani = "az",bashkir = "ba",basque = "eu",belarusian = "be",bengal = "bn",bosnian = "bs",bulgarian = "bg",burmese = "my",catalan = "ca",cebuano = "ceb",chinese = "zh",croatian = "hr",czech = "cs",danish = "da",dutch = "nl",english = "en",esperanto = "eo",estonian = "et",finnish = "fi",french = "fr",galician = "gl",georgian = "ka",german = "de",greek = "el",gujarati = "gu",creole = "ht",hebrew = "he",hillmari = "mrj",hindi = "hi",hungarian = "hu",icelandic = "is",indonesian = "id",irish = "ga",italian = "it",japanese = "ja",javanese = "jv",kannada = "kn",kazakh = "kk",khmer = "km",kirghiz = "ky",korean = "ko",laotian = "lo",latin = "la",latvian = "lv",lithuanian = "lt",luxembourg = "lb",macedonian = "mk",malagasy = "mg",malayalam = "ml",malay = "ms",maltese = "mt",maori = "mi",marathi = "mr",mari = "mhr",mongolian = "mn",nepalese = "ne",norwegian = "no",papiamento = "pap",persian = "fa",polish = "pl",portuguese = "pt",punjabi = "pa",romanian = "ro",russian = "ru",scottish = "gd",serbian = "sr",sinhalese = "si",slovak = "sk",slovenian = "sl",spanish = "es",sundanese = "su",swahili = "sw",swedish = "sv",tagalog = "tl",tajik = "tg",tamil = "ta",tartar = "tt",telugu = "te",thai = "th",turkish = "tr",udmurt = "udm",ukrainian = "uk",urdu = "ur",uzbek = "uz",vietnamese = "vi",welsh = "cy",xhosa = "xh",yiddish = "yi"}
+
+local sendEnabled = false
+local target = ""
+
+function translateTo(message, target)
+    target = target:lower()
+    if l[target] then target = l[target] end
+    local URL = "https://translate.yandex.net/api/v1.5/tr.json/detect?key="..key.."&text="..HttpService:UrlEncode(message)
+    local lang = HttpService:JSONDecode(game:HttpGetAsync(URL)).lang
+    local translation
+    if lang and lang ~= target then
+        local URL = "https://translate.yandex.net/api/v1.5/tr.json/translate?key="..key.."&text="..HttpService:UrlEncode(message).."&lang="..lang.."-"..target
+        translation = HttpService:JSONDecode(game:HttpGetAsync(URL)).text[1]
+    end
+    return translation
+end
+
+function disableSend()
+    sendEnabled = false
+    properties.Text = "[TR] Sending Disabled"
+    StarterGui:SetCore("ChatMakeSystemMessage", properties)
+end
+
+local CBar, CRemote, Connected = LP['PlayerGui']:WaitForChild('Chat')['Frame'].ChatBarParentFrame['Frame'].BoxFrame['Frame'].ChatBar, game:GetService('ReplicatedStorage').DefaultChatSystemChatEvents['SayMessageRequest'], {}
+
+local HookChat = function(Bar)
+    coroutine.wrap(function()
+        if not table.find(Connected,Bar) then
+            local Connect = Bar['FocusLost']:Connect(function(Enter)
+                if Enter ~= false and Bar['Text'] ~= '' then
+                    local Message = Bar['Text']
+                    Bar['Text'] = '';
+                    if Message == ">d" then
+                        disableSend()
+                    elseif Message:sub(1,1) == ">" and not Message:find(" ") then
+                        sendEnabled = true
+                        target = Message:sub(2)
+                    elseif sendEnabled then
+                        Message = translateTo(Message, target)
+                        game:GetService('Players'):Chat(Message); CRemote:FireServer(Message,'All')
+                    else
+                        game:GetService('Players'):Chat(Message); CRemote:FireServer(Message,'All')
+                    end
+                end
+            end)
+            Connected[#Connected+1] = Bar; Bar['AncestryChanged']:Wait(); Connect:Disconnect()
+        end
+    end)()
+end
+
+HookChat(CBar); local BindHook = Instance.new('BindableEvent')
+
+local MT = getrawmetatable(game); local NC = MT.__namecall; setreadonly(MT, false)
+
+MT.__namecall = newcclosure(function(...)
+    local Method, Args = getnamecallmethod(), {...}
+    if rawequal(tostring(Args[1]),'ChatBarFocusChanged') and rawequal(Args[2],true) then 
+        if LP['PlayerGui']:FindFirstChild('Chat') then
+            BindHook:Fire()
+        end
+    end
+    return NC(...)
+end)
+
+BindHook['Event']:Connect(function()
+    CBar = LP['PlayerGui'].Chat['Frame'].ChatBarParentFrame['Frame'].BoxFrame['Frame'].ChatBar
+    HookChat(CBar)
+end)
+end)
+
+
+
+
+
+
+SecondSection:NewButton("Fast Speed(X)", "Click button to enable, then (X)", function()
+	local walkspeedplayer = game:GetService("Players").LocalPlayer
+	local walkspeedmouse = walkspeedplayer:GetMouse()
+	
+	local walkspeedenabled = false
+	
+	function x_walkspeed(key)
+		if (key == "x") then
+			if walkspeedenabled == false then
+				_G.WS = 200;
+				local Humanoid = game:GetService("Players").LocalPlayer.Character.Humanoid;
+				Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+					Humanoid.WalkSpeed = _G.WS;
+				end)
+				Humanoid.WalkSpeed = _G.WS;
+				
+				walkspeedenabled = true
+			elseif walkspeedenabled == true then
+				_G.WS = 20;
+				local Humanoid = game:GetService("Players").LocalPlayer.Character.Humanoid;
+				Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+					Humanoid.WalkSpeed = _G.WS;
+				end)
+				Humanoid.WalkSpeed = _G.WS;
+				
+				walkspeedenabled = false
+			end
+		end
+	end
+	
+	walkspeedmouse.KeyDown:connect(x_walkspeed)
+	
+end)
+
+
+
+--Collect cash crates
+
+local toggleValue = false
+
+SecondSection:NewToggle("Collect Cashcrates", "Teleports you to all cashcrates", function(v)
+  toggleValue = v
+end)
+
+while true do
+  if toggleValue then
+    local cashCrates = game:GetService("Workspace").CrateParent:GetChildren()
+    for _, cashCrate in pairs(cashCrates) do
+      if cashCrate.Name == "CashCrate" then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cashCrate.CFrame
+      end
+    end
+  end
+  wait(0.7)
+end
+
+
